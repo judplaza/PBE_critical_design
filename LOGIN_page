@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Proba formulari</title>
+  <meta charset="UTF-8">
+</head>
+<body>
+  <form action="###########.php" method="post">
+  Ingrese su nombre: 
+  <input type="text" name="nombre" size="20">
+  <br>
+  Ingrese su clave: 
+  <input type="password" name="clave" size="12">
+  <br>
+  <input type="submit" value="login">
+  </form>
+</body>
+</html>
