@@ -7,10 +7,10 @@
 <body>
   <form action="###########.php" method="post">
   Ingrese su nombre: 
-  <input type="text" name="nombre" size="20">
+  <input type="text" name="user" size="20">
   <br>
   Ingrese su clave: 
-  <input type="password" name="clave" size="12">
+  <input type="password" name="password" size="12">
   <br>
   <input type="submit" value="login">
   </form>
