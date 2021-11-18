@@ -22,9 +22,11 @@ class MyWindow(Gtk.Window):
         context = Gtk.StyleContext()
         screen = Gdk.Screen.get_default()
         context.add_provider_for_screen(screen, css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
-                
+        
+        '''inicialitzo variables i constructors'''
+        
         self.preparat_lectura = True
-        self.t = threading.Timer(10, self.logout)
+        #self.t = threading.Timer(10, self.logout)
         
         self.login_page()
         self.state = 1
@@ -35,6 +37,7 @@ class MyWindow(Gtk.Window):
         self.first_time=True
     
     def login_page(self):
+        '''Definició de la pàgina de login'''
         self.box_login= Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)     
         
         self.label = Gtk.Label(label= "Please, login with your university card")
@@ -50,12 +53,14 @@ class MyWindow(Gtk.Window):
                 
         self.add(self.box_login)
         
+        '''LCD *NO* del puzzle2'''
         display.lcd_display_string("Please, login",1)
         display.lcd_display_string("with your card",2)
         sleep(2)
 
         
     def menu_page(self):
+        '''Definició de la pàgina de menu'''
         self.box_menu1 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)        
         self.add(self.box_menu1)
         self.box_menu11 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
@@ -85,15 +90,23 @@ class MyWindow(Gtk.Window):
         self.label_error_menu.set_text("")
         self.label_error_menu.get_style_context().add_class("label")
         self.box_menu11.pack_start(self.label_error_menu, True, True, 0)
-
+        
+        '''LCD *NO* del puzzle2'''
         display.lcd_display_string("Welcome",1)
         display.lcd_display_string(self.username,2)
-        sleep(2)    
+        sleep(2)   
+        
     def lecture_uid(self):        
         self.uid = self.read.hacer_una_lectura()
         self.login_function()
     
     def login_function(self):
+        '''aquesta funció d'encarrega de dur a terme el login:
+            * Un cop llegida una targeta 
+            - Connecta al server
+            - Controla l'error de no connexió
+            - Controla l'error d'usuari no registrat
+            - Si la uid sí és reconeguda: inicia un crono i passa a pantalla menu'''
         
         self.server_connection.set_uid(self.uid)        
         self.thread_login = threading.Thread(target=self.server_connection.login_connection)
@@ -118,17 +131,11 @@ class MyWindow(Gtk.Window):
             else:
                 self.crono()
                 self.t.start()
-                GLib.idle_add(self.change_page)
-            '''#self.label.get_style_context().remove_class("welcome")
-            #self.label.get_style_context().add_class("uid_text")
-            self.remove(self.box_login)
-            self.menu_page()            
-            #self.timer()
-            #t.start()
-            self.show_all()'''
+                GLib.idle_add(self.change_page)            
             
             
     def change_page(self):
+        '''executa els canvis de pantalla/states'''
         if(self.state==1):
             self.remove(self.box_login)
             self.menu_page()                        
@@ -152,6 +159,12 @@ class MyWindow(Gtk.Window):
         return self.entry.get_text()
     
     def get_tabla(self, entry):
+        '''
+            - Llegeix la comanda de l'usuari
+            - Accedeix al server
+            - Control d'error d'escriptura
+            *No hi ha control de connexió a internet perquè sí es controla al login
+        '''
         self.t.cancel()
         self.crono()
         self.t.start()        
@@ -177,13 +190,17 @@ class MyWindow(Gtk.Window):
         
         
     def show_table(self,tabla):
+        '''Mostra la taula a la Window'''
+        
         #self.box_menu1.set_row_spacing(30)
             
         query = list(tabla.keys())[0]
         print(query)
-        if self.first_time is False:
+        
+        if self.first_time is False: #eliminem la taula mostrada anterior si no és la primera taula demanada
             self.treeview.destroy()
             self.scrollable_treelist.destroy()
+        
         try:     
             if query == 'timetables':            
                 self.timetable_table= Gtk.ListStore(str, str, str, str)
@@ -227,7 +244,7 @@ class MyWindow(Gtk.Window):
                     self.treeview.append_column(column)
                 
             
-        #print(self.treeview)
+        
             self.scrollable_treelist = Gtk.ScrolledWindow()
         
             self.scrollable_treelist.set_vexpand(True)          
@@ -235,22 +252,26 @@ class MyWindow(Gtk.Window):
             self.scrollable_treelist.add(self.treeview)
             window.show_all()
             self.first_time=False
-        except IndexError as err:
+        except IndexError as err: #considerem que l'unic error possible serà taula buida
             self.label_error_menu.set_text("Taula buida")
 
     def logout(self, widget):    
+        '''Tornem a la pagina d'inici per l'acció de botó'''
         GLib.idle_add(self.change_page)
     
     def logout_automatic(self):
+        '''Tornem a la pagina d'inici per expiració de crono'''
         self.change_page()                   
             
     def create_thread(self):
+        '''Thread de lectura de rfid'''
         thread = threading.Thread(target=self.lecture_uid)
         thread.setDaemon(True)
         thread.start()
         
     def crono(self):
-        self.t = threading.Timer(300, self.logout_automatic)
+        '''crea thread de crono'''
+        self.t = threading.Timer(120, self.logout_automatic) #després de 2 min d'inactivitat executa el logout
         
         
         
