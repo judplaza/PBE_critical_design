@@ -26,18 +26,15 @@ class Connection:
     
     def login_connection(self):
         try:
-            link = 'http://pbetelematica.ml/login?student_id=' + self.uid
-        #print(link)
-            with urllib.request.urlopen(link) as f:            
+            link = 'http://pbetelematica.ml/login?student_id=' + self.uid        
+            with urllib.request.urlopen(link) as f:      #.request perquè vull llegir       
                 user_name = f.read().decode('utf-8')
         except Exception as err:
             return "error_in_login_instrucction"
         return user_name
         
     
-    def menu_connection(self, entry):
-        #wk_uid = self.get_uid_str
-        #print(str(self.uid))
+    def menu_connection(self, entry):        
         try:
             wk_uid=self.uid      
             if '?' not in entry:
@@ -47,6 +44,6 @@ class Connection:
             with urllib.request.urlopen(link) as f:
                 json_table= f.read().decode('utf-8')
             return json_table
-        except  urllib.error.HTTPError as err:
+        except  urllib.error.HTTPError as err: #error d'instrucció no reconeguda
             return "error_in_menu_instrucction"
         
