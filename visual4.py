@@ -274,7 +274,7 @@ class MyWindow(Gtk.Window):
     
     def logout_automatic(self):
         '''logout per temporitzador expirat'''
-        self.change_page()                   
+        GLib.idle_add(self.change_page)                   
             
     def create_thread(self):
         thread = threading.Thread(target=self.lecture_uid)
