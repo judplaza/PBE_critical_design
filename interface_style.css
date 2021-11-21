@@ -1,0 +1,50 @@
+.welcome{
+	font: 15px Sans;
+	background-color: #012A4A;
+	color: #FFFFFF;
+}
+
+.welcome_error{
+	font: 15px Sans;
+	background-color: #FFFFFF;
+	color: #742C2C;
+}
+
+.label{
+	font: 15px Sans;
+	background-color: #6863B3;
+	color: #FFFFFF;
+}
+
+.row1{
+	font: 15px Sans;
+	background-color: #D0E9F1;
+	color: #0FF000;
+	border: 1px solid black;
+}
+
+.row2{
+	font: 15px Sans;
+	background-color: #D0E9F1;
+	color: #0FFFF0;
+	border: 1px solid black;
+}
+
+.button{
+	font: 15px Sans;
+	background-color: #6E6E6E;
+	color: #FFFFFF;
+}
+
+.button:active{
+	font: 15px Sans;
+	background-color: #545454;
+	color: #FFFFFF;
+}
+
+.button:hover{
+	font: 15px Sans;
+	background-color: #C0C0C0;
+	color: #FFFFFF;
+}
+
