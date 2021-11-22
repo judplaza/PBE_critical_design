@@ -2,14 +2,27 @@
         require_once '../dbconfig.php';
         parse_str($_SERVER['QUERY_STRING'],$variables);
 
-        $query = "SELECT * FROM `marks` WHERE `student_id`='{$variables[student_id]}' ORDER BY `marks`.`subject` ASC";
+        $query = "SELECT `subject`,`name`,`mark`  FROM `marks` WHERE `student_id`='{$variables[student_id]}'";
         if(count($variables) > 0) {
                 foreach($variables as $key => $val) {
                         if($key != "limit" AND $key != "student_id") {
-                                $query .= " AND {$key}='{$val}'";
+                                if(!is_array($val)){
+                                        $query .= " AND {$key}='{$val}'";
+                                }else{
+                                        if($val[lt]!="5"){
+                                                $query.=" AND `mark`<='{$val[lt]}'";
+                                        }elseif($key=`subject`){
+                                                $query.="AND `mark`.`subject`='{$val}'";
+
+                                        }else{
+                                                $query.=" AND `mark`<='5'";
+                                        }
+                                }
+
                         }
                 }
         }
+        $query .= "ORDER BY `marks`.`subject` ASC";
         if(array_key_exists("limit",$variables)) {
                 $query .= " LIMIT {$variables[limit]}";
         }
