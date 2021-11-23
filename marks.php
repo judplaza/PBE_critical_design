@@ -9,13 +9,8 @@
                                 if(!is_array($val)){
                                         $query .= " AND {$key}='{$val}'";
                                 }else{
-                                        if($val[lt]!="5"){
+                                        if($val[lt]!="0"){
                                                 $query.=" AND `mark`<='{$val[lt]}'";
-                                        }elseif($key=`subject`){
-                                                $query.="AND `mark`.`subject`='{$val}'";
-
-                                        }else{
-                                                $query.=" AND `mark`<='5'";
                                         }
                                 }
 
